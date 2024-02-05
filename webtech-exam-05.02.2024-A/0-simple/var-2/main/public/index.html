@@ -1,0 +1,64 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A simple app</title>
+    <script>
+      window.onload = () => {
+        let main = document.getElementById('main');
+        let nameInput = document.getElementById('nameInput');
+        let jobInput = document.getElementById('jobInput');
+        let addBtn = document.getElementById('addBtn');
+
+        const load = async () => {
+          try {
+            let response = await fetch('/employees');
+            let data = await response.json();
+            let rows = data.map(
+              (e) => `
+                        <div>
+                            ${e.name} ${e.job}
+                        </div>
+                    `
+            );
+            main.innerHTML = rows.join('');
+          } catch (err) {
+            console.warn(err);
+          }
+        };
+
+        const add = async () => {
+          console.log('here');
+          const name = nameInput?.value;
+          const job = jobInput?.value;
+          const body = {
+            name,
+            job,
+          };
+          const json = JSON.stringify(body);
+          await fetch('/employees', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: json,
+          });
+          await load();
+        };
+
+        addBtn.addEventListener('click', add);
+
+        load();
+      };
+    </script>
+  </head>
+  <body>
+    <h2>A simple app</h2>
+    <div id="main"></div>
+    <div id="form">
+      <input type="text" name="nameInput" id="nameInput" />
+      <input type="text" name="jobInput" id="jobInput" />
+      <button type="button" name="addBtn" id="addBtn">add</button>
+    </div>
+  </body>
+</html>

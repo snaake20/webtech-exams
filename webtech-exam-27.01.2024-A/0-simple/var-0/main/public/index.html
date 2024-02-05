@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple app</title>
+    <script>
+        window.onload = () => {
+            let btn = document.getElementById('load')
+            let tbl = document.getElementById('main')
+            btn.addEventListener("click", async () => {
+                const res = await fetch('http://localhost:8080/employees?job=accountant');
+                console.log(res)
+                const data = await res.json();
+                console.log(data)
+                const str = data.map((p) => `
+                    <tr>
+                        <td>
+                            ${p.name}
+                        </td>
+                        <td>
+                            ${p.job}
+                        </td>
+                    </tr>
+                `)
+                tbl.innerHTML = str.join('\n');
+            })
+        }
+    </script>
+</head>
+<body>
+    A simple app
+    <button type="button" id="load">Load</button>
+    <table id=main></table>
+</body>
+</html>
