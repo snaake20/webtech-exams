@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import store from '../stores/TaskStore'
 import Task from './Task'
 import SelectedTasks from './SelectedTasks'
@@ -14,7 +14,10 @@ function TaskList () {
 		})
 	}, [])
 
-	// TODO
+	const select = useCallback((item) => {
+		if (selectedTasks.includes(item)) return
+		setSelectedTasks(prev => [...prev, item])
+	}, [selectedTasks])
 
 	const deselect = (item) => {
 		setSelectedTasks(selectedTasks.filter(e => e !== item))
@@ -28,7 +31,7 @@ function TaskList () {
 						<Task item={e} key={e.id} onSelect={select} />
 					)
 				}
-				{/* TODO */}
+				{selectedTasks.length > 0 ? <SelectedTasks items={selectedTasks} onDeselect={deselect} /> : null }
 			</div>
 		</div>
 	)

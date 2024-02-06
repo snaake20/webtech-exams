@@ -46,7 +46,22 @@ app.get('/create', async (req, res) => {
 
 app.get('/people', async (req, res, next) => {
     try{
-        // TODO
+        let people = await Person.findAll()
+        if (Object.keys(req.query).length === 0){
+            return res.status(200).send(JSON.stringify(people))
+        }
+        if (!['name', 'category', 'job'].includes(req.query.sortField)){
+            return res.status(400).json({message : 'cannot sort on non existent field'})
+        }
+        if (!['ASC', 'DESC'].includes(req.query.sortOrder)){
+            return res.status(400).json({message : 'sort order must be one of asc and desc'})
+        }
+        const sortField = req.query.sortField;
+        const sortOrder = req.query.sortOrder;
+        people = await Person.findAll({
+            order: [[sortField, sortOrder]]
+        })
+        res.status(200).send(JSON.stringify(people))
     }
     catch(err){
       next(err)        

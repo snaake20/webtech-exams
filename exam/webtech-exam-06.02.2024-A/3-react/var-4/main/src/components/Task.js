@@ -8,7 +8,7 @@ function Task (props) {
       {
         <>
           {item.description} {item.priority}
-          {/* TODO */}
+          <button onClick={() => onSelect(item)}>select</button>
         </>
       }
     </div>

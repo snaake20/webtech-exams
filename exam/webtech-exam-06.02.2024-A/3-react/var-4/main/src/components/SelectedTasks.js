@@ -4,9 +4,9 @@ function SelectedTasks (props) {
     <div>
       {
         items.map(e => (
-          <div>
+          <div key={e.id}>
             {e.description} {e.priority}
-            {/* TODO */}
+            <button onClick={() => onDeselect(e)}>deselect</button>
           </div>
         ))
       }
